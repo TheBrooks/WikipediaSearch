@@ -1,0 +1,30 @@
+.search-container {
+	margin: 30px 0px 10px 0px;
+	color: white;
+	font-size: 20px;
+
+	a {
+		display: block;
+		text-align: center;
+		text-decoration: none;
+		color: inherit;
+		margin: 10px 0px;
+	}
+}
+
+#search-text {
+	width: 100%;
+	font-weight: 200;
+	border: {
+		color: $accent-color;
+		width: 3px;
+		radius: 999px;
+		style: solid;
+	}
+	background-color: $primary-color;
+	outline: none;
+	padding: {
+		left: 10px;
+		right: 10px;
+	}
+}

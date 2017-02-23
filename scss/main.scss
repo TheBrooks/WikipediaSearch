@@ -1,0 +1,13 @@
+//Resets
+@import 'utils/__utils';
+
+//Globals
+@import 'globals/_variables';
+
+// Sections
+@import 'sections/_search';
+@import 'sections/_results';
+
+body {
+	background-color: $primary-color;
+}
