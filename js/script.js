@@ -1,17 +1,17 @@
 (function($, window, document) {
 	var wikiPageJsonFormatter = (function(){
 		function pagesFromWikiJson(json) {
-			var length = json[1].length;
-			var pages = [];
-			for(var i = 0; i < length; i++) {
+			var pages = json.query.pages;
+			var formattedPages = [];
+			for(var prop in pages) {
 				var newPage = {
-					title: json[1][i],
-					description: json[2][i],
-					url: json[3][i],
+					title: pages[prop].title,
+					description: pages[prop].extract,
+					url: "http://en.wikipedia.org/?curid=" + pages[prop].pageid,
 				};
-				pages[i] = newPage;
+				formattedPages.push(newPage);
 			}
-			return pages;
+			return formattedPages;
 		}
 
 		return {
@@ -20,35 +20,52 @@
 	})();
 
 	var wikiSearcher = (function(wikiJsonFormatter){
-		var api = "https://en.wikipedia.org/w/api.php?action=opensearch&search=";
+		var offset = 0;
+		var limit = 10;
+		var search = "";
+		var apiBase = "https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&prop=extracts&exintro&explaintext&exsentences=1&exlimit=max"
+		var limitParam = "&gsrlimit=";
+		var offsetParam = "&gsroffset=";
+		var searchParam = "&gsrsearch=";
 
 		//Cache DOM
 		var $search = $("#search-text");
 
 		//bind events
 		$search.on('search', searchFired);
+		events.subscribe('bottomOfPage', bottomOfPage);
 
 		function searchFired() {
-			var searchStr = $search.val();
-			if (!searchStr) {
-				clearSearch();
-			}
-			else {
-				queryWikipedia(searchStr);
-			}
+			offset = 0;
+			search = $search.val();
+			clearSearch();
+			getNextWikipediaQuery();
 		}
 
 		function clearSearch() {
 			events.emit("clearSearch", []);
 		}
 
-		function queryWikipedia(searchStr) {
-			var queryStr = api + searchStr;
-			var result = $.getJSON(queryStr);
-			result.done(function(data){
-				var pages = wikiJsonFormatter.pagesFromWikiJson(data);
-				events.emit("updateQueryResults", pages);
-			});
+		function getNextWikipediaQuery() {
+			if (!search) {
+				return;
+			}
+
+			var queryStr = apiBase + limitParam + limit + offsetParam + offset + searchParam + search;
+			var query = $.getJSON(queryStr);
+			events.emit('queriedPages', null);
+			// TODO handle error
+			query.done(handleWikipediaData);
+		}
+
+		function handleWikipediaData(data) {
+			var pages = wikiJsonFormatter.pagesFromWikiJson(data);
+			offset += pages.length;
+			events.emit("updateQueryResults", pages);
+		}
+
+		function bottomOfPage(){
+			getNextWikipediaQuery();
 		}
 	})(wikiPageJsonFormatter);
 
@@ -61,7 +78,7 @@
 		var template = $ul.find("#page-template").html();
 
 		//bind events
-		events.subscribe('updateQueryResults', setPages);
+		events.subscribe('updateQueryResults', addPages);
 		events.subscribe('clearSearch', clearPages);
 		_render();
 
@@ -70,17 +87,8 @@
 		}
 
 		function addPages(value) {
-			pages.push(value);
-			_render();
-		}
-
-		function setPages(value) {
-			pages = value;
-			_render();
-		}
-
-		function removePage(event) {
-			pages.splice(event, 1);
+			pages = pages.concat(value);
+			//events.emit('addedPages', null);
 			_render();
 		}
 
@@ -90,9 +98,7 @@
 		}
 
 		return {
-			setPages: setPages,
 			addPages: addPages,
-			removePage: removePage,
 			clearPages: clearPages,
 		};
 	})();
