@@ -11,7 +11,6 @@
 		events.subscribe('queriedPages', showLoading);
 
 		function checkBottomOfPage() {
-			console.log($(document).height() - win.height());
 			if ($(document).height() - win.height() == win.scrollTop()) {
 				events.emit("bottomOfPage", null);
 			}

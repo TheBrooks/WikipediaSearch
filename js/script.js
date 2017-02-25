@@ -88,7 +88,7 @@
 
 		function addPages(value) {
 			pages = pages.concat(value);
-			//events.emit('addedPages', null);
+			events.emit('addedPages', null);
 			_render();
 		}
 
