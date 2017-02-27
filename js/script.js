@@ -1,3 +1,6 @@
+var $ = require('jquery');
+var Mustache = require('mustache');
+
 (function($, window, document) {
 	var events = require('./pubsub.js');
 
@@ -104,4 +107,4 @@
 			clearPages: clearPages,
 		};
 	})();
-}(window.jQuery, window, document));
+}($, window, document));

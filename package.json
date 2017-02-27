@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/TheBrooks/WikipediaSearch/issues"
   },
-  "homepage": "https://github.com/TheBrooks/WikipediaSearch#readme"
+  "homepage": "https://github.com/TheBrooks/WikipediaSearch#readme",
+  "devDependencies": {
+    "imports-loader": "^0.7.1"
+  }
 }

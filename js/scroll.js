@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 (function($, window, document) {	
 	var events = require('./pubsub.js');
 
@@ -26,4 +28,4 @@
 			$loading.hide();
 		}
 	})();
-}(window.jQuery, window, document));
+}($, window, document));
