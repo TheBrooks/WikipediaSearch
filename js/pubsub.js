@@ -1,5 +1,3 @@
-//events - a super-basic Javascript (publish subscribe) pattern
-
 var events = {
   events: {},
   subscribe: function (eventName, fn) {
@@ -24,3 +22,5 @@ var events = {
     }
   }
 };
+
+module.exports = events;

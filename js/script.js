@@ -1,4 +1,6 @@
 (function($, window, document) {
+	var events = require('./pubsub.js');
+
 	var wikiPageJsonFormatter = (function(){
 		function pagesFromWikiJson(json) {
 			var pages = json.query.pages;

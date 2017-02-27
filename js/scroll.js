@@ -1,4 +1,6 @@
 (function($, window, document) {	
+	var events = require('./pubsub.js');
+
 	var scroll = (function(){
 		var win = $(window);
 
