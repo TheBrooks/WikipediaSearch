@@ -11,6 +11,7 @@
 		color: inherit;
 	}
 	li {
+		position: relative;
 		background-color: white;
 		display: block;
 		padding: 1px 5px 5px 30px;
@@ -24,5 +25,16 @@
 			left: 5px solid $accent-color;
 		}
 		margin-left: -5px;
+	}
+}
+
+.del {
+	float: right;
+	padding: 2px 4px;
+	transition: opacity 0.3s;
+	margin-top: 3px;
+	
+	&:hover {
+		background-color: rgba(100,100,100,.5);
 	}
 }

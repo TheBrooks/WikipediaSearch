@@ -85,6 +85,7 @@ var Mustache = require('mustache');
 		//bind events
 		events.subscribe('updateQueryResults', addPages);
 		events.subscribe('clearSearch', clearPages);
+		$ul.delegate('i.del', 'click', deletePage);
 		_render();
 
 		function _render() {
@@ -99,6 +100,14 @@ var Mustache = require('mustache');
 
 		function clearPages() {
 			pages = [];
+			_render();
+		}
+
+		function deletePage(event) {
+			event.preventDefault();
+			var $remove = $(event.target).closest('li');
+			var i = $ul.find('li').index($remove);
+			pages.splice(i, 1);
 			_render();
 		}
 
